@@ -20,7 +20,7 @@ function buildGrid(){
     return grid;
 }
 
-const grid = buildGrid();
+let grid = buildGrid();
 console.log(grid)
 
 function plotGrid(grid){
@@ -55,5 +55,6 @@ canvas.addEventListener("click", evt => {
 clearBtn.onclick = function(){
     console.log("cleared")
     let newGrid = buildGrid();
+    grid = newGrid;
     plotGrid(newGrid);
 }
