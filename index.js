@@ -34,9 +34,7 @@ function update() {
         plotGrid(grid);
         setTimeout(() => {  console.log(); }, 3000);
         requestAnimationFrame(update);
-
-    }
-  
+    }  
 }
 
 
@@ -66,9 +64,7 @@ startBtn.onclick = function(){
     }
     if (stopped == false) {
         requestAnimationFrame(update);
-    }  
-    
-
+    }     
 }
 
 endBtn.onclick = function(){
@@ -122,19 +118,15 @@ function plotGrid(grid){
     }
 }
 
-
 function nextSteps() {
     let newGrid = grid;
     for (let i = 0; i < alive_idx.length(); i++) {
         console.log(alive_idx[i])
-
     } 
 }
 
-
 grid = buildGrid();
 plotGrid(grid);
-
 
 function isCanvasBlank(canvas) {
   return !canvas.getContext('2d')
@@ -146,7 +138,6 @@ function clearGrid(){
     let newGrid = buildGrid();
     grid = newGrid;
     plotGrid(newGrid);
-
 }
 
 
