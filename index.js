@@ -25,7 +25,6 @@ function buildGrid(){
 
 
 
-
 function update() {
     if (isCanvasBlank(canvas)) {
         clearGrid()
@@ -33,6 +32,7 @@ function update() {
     if (stopped == false){
         grid = nextGen(grid);
         plotGrid(grid);
+        setTimeout(() => {  console.log(); }, 3000);
         requestAnimationFrame(update);
 
     }
