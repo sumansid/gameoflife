@@ -26,7 +26,7 @@ function buildGrid(){
 
 
 function update() {
-    if (isCanvasBlank(canvas)) {
+    if (isCanvasBlank(canvas) || stopped == true) {
         clearGrid()
     }
     if (stopped == false){

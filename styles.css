@@ -1,3 +1,6 @@
-.body {
-  background: #000;
+html {
+  background-color: #1a1a1a;
+}
+body {
+  font-family: "Roboto Mono", monospace;
 }
