@@ -1,11 +1,14 @@
 const canvas = document.querySelector("canvas");
 const clearBtn = document.getElementById("clearBtn");
+const startBtn = document.getElementById("startBtn");
+const endBtn = document.getElementById("endBtn");
 const context = canvas.getContext("2d");
 const block = 40;
-canvas.width = 400;
-canvas.height = 400;
+canvas.width = 800;
+canvas.height = 800;
 const ROW = canvas.width / block;
 const COL = canvas.height / block;
+let stopped = false;
 
 function buildGrid(){
     const grid = [];
@@ -20,11 +23,93 @@ function buildGrid(){
     return grid;
 }
 
-let grid = buildGrid();
-console.log(grid)
+
+
+
+function update() {
+    if (isCanvasBlank(canvas)) {
+        clearGrid()
+    }
+    if (stopped == false){
+        grid = nextGen(grid);
+        plotGrid(grid);
+        requestAnimationFrame(update);
+
+    }
+  
+}
+
+
+canvas.addEventListener("click", evt => {
+  
+  const tileX = ~~(evt.offsetX / block);
+  const tileY = ~~(evt.offsetY / block);
+  console.log("clicked ", tileX, tileY);
+  grid[tileX][tileY] = grid[tileX][tileY] ? 0 : 1;
+  console.log(grid);
+
+  plotGrid(grid);
+
+});
+
+clearBtn.onclick = function(){
+    console.log("cleared")
+    clearGrid()
+    
+}
+
+startBtn.onclick = function(){
+    stopped = false;
+    if (isCanvasBlank(canvas)) {
+        clearGrid()
+        stopped = true
+    }
+    if (stopped == false) {
+        requestAnimationFrame(update);
+    }  
+    
+
+}
+
+endBtn.onclick = function(){
+    stopped = true;
+}
+
+function nextGen(grid) {
+  const nextGen = grid.map(arr => [...arr]);
+
+  for (let col = 0; col < grid.length; col++) {
+    for (let row = 0; row < grid[col].length; row++) {
+      const cell = grid[col][row];
+      let numNeighbours = 0;
+      for (let i = -1; i < 2; i++) {
+        for (let j = -1; j < 2; j++) {
+          if (i === 0 && j === 0) {
+            continue;
+          }
+          const x_cell = col + i;
+          const y_cell = row + j;
+
+          if (x_cell >= 0 && y_cell >= 0 && x_cell < COL && y_cell < ROW) {
+            const currentNeighbour = grid[col + i][row + j];
+            numNeighbours += currentNeighbour;
+          }
+        }
+      }
+      if (cell === 1 && numNeighbours < 2) {
+        nextGen[col][row] = 0;
+      } else if (cell === 1 && numNeighbours > 3) {
+        nextGen[col][row] = 0;
+      } else if (cell === 0 && numNeighbours === 3) {
+        nextGen[col][row] = 1;
+      }
+    }
+  }
+  return nextGen;
+}
+
 
 function plotGrid(grid){
-
        for (let i = 0; i < ROW; i++) {
         for (let j = 0; j < COL; j++) {
             const cell = grid[i][j];
@@ -34,27 +119,34 @@ function plotGrid(grid){
             context.fill();
             context.stroke();
         }
-        
     }
-
 }
 
+
+function nextSteps() {
+    let newGrid = grid;
+    for (let i = 0; i < alive_idx.length(); i++) {
+        console.log(alive_idx[i])
+
+    } 
+}
+
+
+grid = buildGrid();
 plotGrid(grid);
 
-canvas.addEventListener("click", evt => {
-  
-  const tileX = ~~(evt.offsetX / block);
-  const tileY = ~~(evt.offsetY / block);
-  console.log("clicked ", tileX, tileY);
-  grid[tileX][tileY] = grid[tileX][tileY] ? 0 : 1;
-  console.log(grid);
-  plotGrid(grid);
 
-});
+function isCanvasBlank(canvas) {
+  return !canvas.getContext('2d')
+    .getImageData(0, 0, canvas.width, canvas.height).data
+    .some(channel => channel !== 0);
+}
 
-clearBtn.onclick = function(){
-    console.log("cleared")
+function clearGrid(){
     let newGrid = buildGrid();
     grid = newGrid;
     plotGrid(newGrid);
+
 }
+
+
