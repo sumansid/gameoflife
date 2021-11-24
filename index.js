@@ -26,7 +26,8 @@ function buildGrid(){
 
 
 function update() {
-    if (isCanvasBlank(canvas) || stopped == true) {
+    if (isCanvasBlank(grid) || stopped == true) {
+        stopped = true;
         clearGrid()
     }
     if (stopped == false){
@@ -52,15 +53,15 @@ canvas.addEventListener("click", evt => {
 
 clearBtn.onclick = function(){
     console.log("cleared")
-    clearGrid()
-    
+    clearGrid()  
 }
 
 startBtn.onclick = function(){
     stopped = false;
-    if (isCanvasBlank(canvas)) {
-        clearGrid()
+    if (isCanvasBlank(grid)) {
         stopped = true
+        clearGrid()
+        
     }
     if (stopped == false) {
         requestAnimationFrame(update);
@@ -128,11 +129,17 @@ function nextSteps() {
 grid = buildGrid();
 plotGrid(grid);
 
-function isCanvasBlank(canvas) {
-  return !canvas.getContext('2d')
-    .getImageData(0, 0, canvas.width, canvas.height).data
-    .some(channel => channel !== 0);
+
+function isCanvasBlank(grid) {
+  
+  const arr = grid;
+  const result = arr.flat().reduce((a,b) => a+b);
+
+  console.log(result);
+  return result==0;
 }
+
+
 
 function clearGrid(){
     let newGrid = buildGrid();
